@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Destinations - Explore the World</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            color: #4A4035;
+            background-color: #F8F1E9;
+        }
+        header {
+            background: linear-gradient(135deg, #D8C7B1, #E8D9C6);
+            color: #4A4035;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+        }
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300%;
+            height: 100%;
+            display: flex;
+            animation: slide 15s infinite;
+        }
+        .hero .slide {
+            width: 33.33%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        .hero .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 64, 53, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #F8F1E9;
+            text-align: center;
+        }
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #000000;
+        }
+        .hero button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: #C9A68B;
+            border: none;
+            border-radius: 5px;
+            color: #F8F1E9;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .hero button:hover {
+            transform: scale(1.05);
+            background: #D4B39C;
+        }
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            33.33% { transform: translateX(0); }
+            44.44% { transform: translateX(-33.33%); }
+            77.77% { transform: translateX(-33.33%); }
+            88.88% { transform: translateX(-66.66%); }
+            100% { transform: translateX(-66.66%); }
+        }
+        #map {
+            height: 400px;
+            margin: 20px;
+            border-radius: 10px;
+            background: url('https://source.unsplash.com/featured/?paris') no-repeat center center/cover;
+            opacity: 0.9;
+        }
+        section {
+            padding: 40px 20px;
+            background: #FDF8F2;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #8B6F47;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #E8D9C6;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: linear-gradient(135deg, #D8C7B1, #E8D9C6);
+            color: #4A4035;
+        }
+        .destinations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+            min-width: 300px;
+            height: 400px;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(0); /* Remove initial blur for clarity */
+            transition: filter 0.5s;
+            draggable: true;
+        }
+        .card img.loaded {
+            filter: none; /* Ensure no blur after loading */
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card:hover img {
+            transform: scale(1.1);
+        }
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(74, 64, 53, 0.6);
+            color: #F8F1E9;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        .card:hover .card-content {
+            transform: translateY(0);
+        }
+        .card-content h3 {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+        }
+        .card-content p {
+            margin: 5px 0 0;
+            font-style: italic;
+        }
+        .card .wishlist {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #C9A68B;
+            color: #F8F1E9;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .card .wishlist:hover {
+            background: #D4B39C;
+        }
+        .drop-zone {
+            border: 2px dashed #8B6F47;
+            padding: 20px;
+            text-align: center;
+            min-height: 100px;
+            margin: 20px 0;
+            background-color: #F4ECE1;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+        }
+        label {
+            font-weight: bold;
+            color: #4A4035;
+        }
+        input, select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #E8D9C6;
+        }
+        .stories {
+            position: relative;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #F8F1E9, #EDE4D8);
+        }
+        .story {
+            display: flex;
+            align-items: center;
+            margin: 40px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .story.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .story img {
+            width: 50%;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        .story-content {
+            width: 50%;
+        }
+        .story-content h3 {
+            font-family: 'Playfair Display', serif;
+            color: #8B6F47;
+        }
+        .parallax {
+            background: url('https://source.unsplash.com/featured/?travel,culture') no-repeat center center fixed;
+            background-size: cover;
+            padding: 60px 20px;
+            color: #F8F1E9;
+            text-align: center;
+            position: relative;
+        }
+        .parallax::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 64, 53, 0.5);
+            z-index: 1;
+        }
+        .parallax-content {
+            position: relative;
+            z-index: 2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(74, 64, 53, 0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #FDF8F2;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #E8D9C6;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #8B6F47;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover {
+            color: #4A4035;
+            cursor: pointer;
+        }
+        .media-menu {
+            background: linear-gradient(135deg, #D8C7B1, #E8D9C6);
+            color: #4A4035;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .media-menu a {
+            color: #4A4035;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(248, 241, 233, 0.2);
+        }
+        .media-menu a:hover {
+            background: rgba(248, 241, 233, 0.4);
+        }
+        video, iframe {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        footer {
+            background: linear-gradient(135deg, #D8C7B1, #E8D9C6);
+            color: #4A4035;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+   <header>
+    <h1 style="text-align: center;">DREAM DESTINATIONS</h1>
+   </header>
+
+    <section class="hero">
+        <div class="slider">
+            <div class="slide" style="background-image: url('paris.jpg');"></div>
+            <div class="slide" style="background-image: url('sea.jpg');"></div>
+            <div class="slide" style="background-image: url('glazier.jpg');"></div>
+        </div>
+        <div class="overlay">
+            <h2>Discover My Dream Destination</h2>
+            <button onclick="document.getElementById('dest-list').scrollIntoView({behavior: 'smooth'})">Start Exploring</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>My Top 5 Dream Destinations</h2>
+        <ol>
+            <li>Interlaken, Switzerland</li>
+            <li>Seoul, South Korea</li>
+            <li>Paris, France</li>
+            <li>Barcelona, Spain</li>
+            <li>Athens, Greece</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Things I want to Do</h2>
+        <ul>
+            <li><strong>Interlaken, Switzerland:</strong> Hike in the Jungfrau Region, paraglide over Lakes Thun and Brienz, or visit Jungfraujoch, the "Top of Europe."</li>
+            <li><strong>Seoul, South Korea:</strong> Explore Gyeongbokgung Palace, shop in Myeongdong, or hike Bukhansan National Park for city views.</li>
+            <li><strong>Paris, France:</strong> Visit the Eiffel Tower, stroll the Champs-Élysées, or explore the Louvre’s iconic art collection.</li>
+            <li><strong>Barcelona, Spain:</strong> Tour Sagrada Família, wander Park Güell, or relax on Barceloneta Beach.</li>
+            <li><strong>Athens, Greece:</strong> Explore the Acropolis, wander the Plaka district, or savor Greek food in a Monastiraki taverna.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Destination Comparison</h2>
+        <table>
+            <tr>
+                <th>Place</th>
+                <th>Best Time to Visit</th>
+                <th>Budget (USD)</th>
+                <th>Rating (1-5)</th>
+            </tr>
+            <tr>
+                <td>Interlaken, Switzerland</td>
+                <td>June–August, December–March</td>
+                <td>2,000–4,000</td>
+                <td>4.8</td>
+            </tr>
+            <tr>
+                <td>Seoul, South Korea</td>
+                <td>March–May, September–November</td>
+                <td>1,000–2,500</td>
+                <td>4.6</td>
+            </tr>
+            
+        </table>
+    </section>
+
+    <section>
+        <h2>Explore on Map</h2>
+        <div id="map"></div>
+    </section>
+
+    <section class="destinations" id="dest-list">
+        <h2>Destination Gallery</h2>
+        <div class="drop-zone">Drop your favorite destination image here!</div>
+    </section>
+
+    <section>
+        <h2>Plan Your Trip</h2>
+        <form>
+            <label for="season">Preferred Travel Season:</label>
+            <select id="season" name="season">
+                <option value="spring">Spring</option>
+                <option value="summer">Summer</option>
+                <option value="fall">Fall</option>
+                <option value="winter">Winter</option>
+            </select>
+
+            <label for="trip-date">Planned Trip Date:</label>
+            <input type="date" id="trip-date" name="trip-date">
+
+            <label for="budget">Budget Preference ($):</label>
+            <input type="range" id="budget" name="budget" min="500" max="5000" step="100" value="2500">
+            <span>Selected Budget: $<span id="budget-value">2500</span></span>
+        </form>
+    </section>
+
+    <section class="stories">
+        <h2>Featured Stories</h2>
+        <div class="story">
+            <img src="velankanni.jpg" alt="velankanni">
+            <div class="story-content">
+                <h3>The Velankanni Church Feast</h3>
+                <p>Explore celebration likely including religious ceremonies, processions, and cultural events, reflecting the devotion to Our Lady of Health..</p>
+            </div>
+        </div>
+        <div class="story">
+            <img src="alagar.jpg" alt="alagar">
+            <div class="story-content">
+                <h3>Chithirai festival,</h3>
+                <p>Discover Meenakshi Temple and celebrate the coronation and marriage of goddess Meenakshi.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="media-menu">
+        <h2>Travel Media</h2>
+        <a href="#audio">Background Music</a>
+        <a href="#video">Travel Video</a>
+        <div id="audio">
+            <audio controls loop>
+                <source src="audio.mp3" type="audio/mpeg">
+                Play and feel the rhythm of Velankanni!
+            </audio>
+        </div>
+        <div id="video">
+            <iframe width="560" height="315" src="barcelona video.mp4" title="Travel Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-desc"></p>
+            <img id="modal-img" style="width:100%; height:auto;">
+        </div>
+    </div>
+
+    <footer>
+        &copy; Leya's Dream Destinations 2025
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        const destinations = [
+            { 
+                name: "Interlaken, Switzerland", 
+                desc: "Alpine paradise nestled between Lakes Thun and Brienz, perfect for adventure and stunning views.", 
+                img: "switzer.jpg", 
+                lat: 46.6863, 
+                lng: 7.8632, 
+                tagline: "Where Alps meet adventure" 
+            },
+            { 
+                name: "Seoul, South Korea", 
+                desc: "Vibrant metropolis blending ancient palaces with modern skyscrapers and K-pop culture.", 
+                img: "korea.jpg", 
+                lat: 37.5665, 
+                lng: 126.9780, 
+                tagline: "Where tradition meets modernity" 
+            },
+            { 
+                name: "Paris, France", 
+                desc: "Romantic city of art, culture, and history, home to the Eiffel Tower and Louvre.", 
+                img: "france.jpg", 
+                lat: 48.8566, 
+                lng: 2.3522, 
+                tagline: "Where romance meets art" 
+            },
+            { 
+                name: "Barcelona, Spain", 
+                desc: "Vibrant city with Gaudí’s architecture, Mediterranean beaches, and lively culture.", 
+                img: "barcelona.jpg", 
+                lat: 41.3851, 
+                lng: 2.1734, 
+                tagline: "Where Gaudí’s dreams come alive" 
+            },
+            { 
+                name: "Athens, Greece", 
+                desc: "Cradle of Western civilization, with ancient ruins like the Acropolis and vibrant neighborhoods.", 
+                img: "greece.jpg", 
+                lat: 37.9838, 
+                lng: 23.7275, 
+                tagline: "Where history shapes the present" 
+            }
+        ];
+
+        // Init map
+        const map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        destinations.forEach(dest => {
+            const marker = L.marker([dest.lat, dest.lng]).addTo(map);
+            marker.bindPopup(`
+                <div style="text-align:center;">
+                    <img src="${dest.img}" style="width:100px;height:auto;border-radius:5px;">
+                    <h3>${dest.name}</h3>
+                    <p>${dest.tagline}</p>
+                </div>
+            `);
+        });
+
+        // Populate cards
+        const destList = document.getElementById('dest-list');
+        destinations.forEach((dest, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${dest.img}" draggable="true" alt="${dest.name}" data-src="${dest.img}">
+                <button class="wishlist" onclick="alert('Added to Wishlist!')">♥</button>
+                <div class="card-content">
+                    <h3>${dest.name}</h3>
+                    <p>${dest.tagline}</p>
+                </div>
+            `;
+            card.onclick = () => openModal(dest);
+            destList.insertBefore(card, destList.querySelector('.drop-zone'));
+        });
+
+        // Lazy loading images
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.onload = () => img.classList.add('loaded');
+        });
+
+        // Scroll animations for stories
+        const stories = document.querySelectorAll('.story');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+        stories.forEach(story => observer.observe(story));
+
+        function openModal(dest) {
+            document.getElementById('modal-title').textContent = dest.name;
+            document.getElementById('modal-desc').textContent = dest.desc;
+            document.getElementById('modal-img').src = dest.img;
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Update budget display
+        document.getElementById('budget').addEventListener('input', function() {
+            document.getElementById('budget-value').textContent = this.value;
+        });
+    </script>
+</body>
+</html>
