@@ -1,0 +1,123 @@
+/* General body styling */
+body {
+    background-color: #1a2233;
+    color: #e0eafc;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Header container */
+header {
+    background-color: #1a1e3a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 6px #000d33;
+    flex-wrap: wrap;
+}
+
+/* Logo styling */
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #cce0ff;
+}
+
+/* Navigation list */
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Navigation links */
+nav ul li a {
+    text-decoration: none;
+    color: #cce0ff;
+    font-size: 1rem;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #00e5ff;
+    text-shadow: 0 0 8px #00e5ff, 0 0 12px #00ffff;
+}
+
+/* Responsive: stack menu for small screens */
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #24324a;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+    gap: 20px;
+}
+
+/* Dropdown button styling */
+.dropbtn {
+    background-color: #394e6a;
+    color: #e0eafc;
+    padding: 14px 24px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Animate button on hover */
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #00bfff;
+    transform: scale(1.1);
+    outline: none;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    display: block;
+    margin: 0 auto 15px;
+}
+
+/* Footer */
+footer {
+    background-color: #0b1623;
+    color: #e0eafc;
+    padding: 12px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 60px;
+}
+
+footer a {
+    color: #00bfff;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #94d4ff;
+    text-decoration: underline;
+}

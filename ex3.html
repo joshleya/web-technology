@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Hole Explorer</title>
+    <link rel="stylesheet" href="ex3.css">
+    <style>
+        section {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #293749;
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+        }
+        section h2 {
+            text-align: center;
+            margin-bottom: 18px;
+            color: #00bfff;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #24324a;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            border-radius: 8px;
+            z-index: 1000;
+            top: 45px;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+        }
+        .dropdown-content a {
+            color: #cbd6f0;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 6px;
+        }
+        .dropdown-content a:hover {
+            background-color: #00bfff;
+            color: #1a2233;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body style="background-color: #1a2233; color: #e0eafc; font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center;">
+    <header style="background-color: #1a1e3a; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; box-shadow: 0 2px 6px #000d33; flex-wrap: wrap;">
+        <div class="logo" style="font-size: 1.5rem; font-weight: bold; color: #cce0ff;">🌌 Black Hole Explorer</div>
+        <nav>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 1.5rem;">
+                <li><a href="#what" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">What are Black Holes?</a></li>
+                <li><a href="#detection" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">Detection</a></li>
+                <li><a href="#facts" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">Facts</a></li>
+                <li><a href="#formation" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">Formation</a></li>
+                <li><a href="#inside" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">Inside</a></li>
+                <li><a href="#danger" style="text-decoration: none; color: #cce0ff; font-size: 1rem; transition: color 0.3s ease, text-shadow 0.3s ease;">Danger</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="navbar" style="background-color: #24324a; display: flex; justify-content: center; padding: 12px 0; gap: 20px;">
+        <div class="dropdown">
+            <button class="dropbtn" style="background-color: #394e6a; color: #e0eafc; padding: 14px 24px; font-size: 16px; border: none; cursor: pointer; border-radius: 6px; transition: background-color 0.3s ease, transform 0.3s ease; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);">Explore Black Holes</button>
+            <div class="dropdown-content">
+                <a href="#what">What are Black Holes?</a>
+                <a href="#detection">How Are They Detected?</a>
+                <a href="#facts">Fascinating Facts</a>
+                <a href="#formation">How Are They Formed?</a>
+                <a href="#inside">Inside a Black Hole</a>
+                <a href="#danger">Are They Dangerous?</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="what">
+        <h2>What are Black Holes?</h2>
+        <p>A black hole is a region in space with gravity so intense that nothing, not even light, can escape from it once within the event horizon. It is formed by the collapse of massive stars or other cosmic events that compress matter to a singularity.</p>
+        <ul>
+            <li><strong>Event Horizon:</strong> The boundary beyond which escape is impossible.</li>
+            <li><strong>Singularity:</strong> A point of infinite density at the black hole's core.</li>
+            <li><strong>Not solid:</strong> The event horizon is not a surface but a theoretical boundary.</li>
+        </ul>
+    </section>
+
+    <section id="detection">
+        <h2>How Do Scientists Detect Black Holes?</h2>
+        <p>Because black holes do not emit light themselves, scientists detect them using indirect evidence:</p>
+        <ul>
+            <li><strong>Accretion Disks:</strong> Hot glowing gas swirling around emits X-rays.</li>
+            <li><strong>Star Orbits:</strong> Stars orbiting an invisible massive object.</li>
+            <li><strong>Gravitational Waves:</strong> Detected ripples in spacetime from black hole mergers.</li>
+            <li><strong>Gravitational Lensing:</strong> Light bending around black holes distorts background objects.</li>
+        </ul>
+    </section>
+
+    <section id="facts">
+        <h2>Fascinating Black Hole Facts</h2>
+        <ul>
+            <li>Nearest known black hole (Gaia BH1) is 1,500 light-years away.</li>
+            <li>The largest known black hole (TON 618) is about 66 billion solar masses.</li>
+            <li>Black holes spin rapidly — one spins over 1,000 times per second.</li>
+            <li>“Spaghettification” stretches matter falling close to black holes because of extreme tidal forces.</li>
+            <li>Black holes do not suck things in from a distance like vacuum cleaners.</li>
+        </ul>
+    </section>
+
+    <section id="formation">
+        <h2>How Are Black Holes Formed?</h2>
+        <p>Black holes usually form when massive stars collapse after supernova explosions, creating a singularity with an event horizon.</p>
+        <ul>
+            <li><strong>Stellar-mass black holes:</strong> Result from dying stars with masses over ~8-10 times the Sun.</li>
+            <li><strong>Supermassive black holes:</strong> Found in galaxy centers; formed by gas accretion and mergers.</li>
+            <li><strong>Primordial black holes:</strong> Theoretical black holes formed shortly after the Big Bang.</li>
+        </ul>
+    </section>
+
+    <section id="inside">
+        <h2>What Happens Inside a Black Hole?</h2>
+        <p>Inside a black hole, matter is crushed to an infinitely dense point called a singularity, where known laws of physics break down. The event horizon marks the boundary beyond which nothing can escape, and spacetime is extremely warped. Classical general relativity predicts the singularity, but quantum gravity effects likely play a role at this scale, though details remain unknown.</p>
+        <ul>
+            <li><strong>Singularity:</strong> Point of infinite density and zero volume.</li>
+            <li><strong>Spacetime curvature:</strong> Near-infinite; classical physics ceases to apply.</li>
+            <li><strong>Event horizon:</strong> No information escapes beyond this boundary.</li>
+            <li>The true internal structure is still a subject of research.</li>
+        </ul>
+    </section>
+
+    <section id="danger">
+        <h2>Are Black Holes Dangerous to Earth?</h2>
+        <p>Black holes are not a danger to Earth at present because all known black holes are very far away — thousands of light years from us.</p>
+        <ul>
+            <li>At a distance, a black hole’s gravity behaves like any object of the same mass, so it does not pull or suck Earth toward it.</li>
+            <li>The possibility of a rogue black hole crossing our path is incredibly low.</li>
+            <li>If Earth were to cross the event horizon of a black hole, it would be destroyed by gravitational forces — but this scenario is practically impossible with current knowledge.</li>
+        </ul>
+    </section>
+</body>
+</html>
